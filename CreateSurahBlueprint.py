@@ -1,3 +1,6 @@
+#! python3
+
+import sys
 # Takes as input the name of the Surah you want added - then adds the pages of the Surah in the Correct Format to the database
 
 # index, name, page start, page end
@@ -119,21 +122,39 @@ index_list = [
 ]
 def main():
     """
-    main function for BulkAddSurah.py
+    main function for CreateSurahBlueprint.py
     """
-    # print("Welcome to BulkAddSurah.py")
-    # print("This program will add the pages of a Surah to the database")
-    # print("Please enter the name of the Surah you want to add")
-    # surahName = input()
-    # print("You have entered: " + surahName)
-    # print("Is this correct? (Y/N)")
-    # confirmation = input()
-    # if confirmation == "Y":
-    #     print("Adding Surah to Database")
-    #     addSurah(surahName)
-    # else:
-    #     return
-    
+    print("Welcome to CreateSurahBlueprint.py")
+    print("What would you like to do?")
+    option_1 = ' (1) Show the list of Surahs'
+    option_1 = option_1.center(211, '*')
+    option_2 = ' (2) Create a Surah Blueprint'
+    option_2 = option_2.center(211, '*')
+    exit_prompt = ' (Type \'exit\' to exit the program) '
+    exit_prompt = exit_prompt.center(211, '*')
+
+    answer = ""
+
+    while answer.lower() != "exit":
+        print(f'{option_1}\n{option_2}\n{exit_prompt}')
+        answer = input()
+        if answer == "1":
+            print_surah_list()
+
+def print_surah_list():
+    """
+    Prints the list of Surahs
+    """
+    print("Here is the list of Surahs")
+    print("Index".ljust(10) + "Name".ljust(30) + "Page Start".ljust(20) + "Page End".ljust(20))
+    for surah in index_list:
+         # Encode each string before printing
+        index = str(surah[0]).encode('utf-8', 'ignore').decode('utf-8')
+        name = surah[1]
+        page_start = str(surah[2]).encode('utf-8', 'ignore').decode('utf-8')
+        page_end = str(surah[3]).encode('utf-8', 'ignore').decode('utf-8')
+
+        print(index.ljust(10) + name.ljust(30) + page_start.ljust(20) + page_end.ljust(20))  
 
 if __name__ == "__main__":
     main()
