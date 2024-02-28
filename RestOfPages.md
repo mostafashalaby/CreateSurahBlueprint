@@ -1,6 +1,3 @@
-Previous Page: [[x]]
-Next Page: [[x]]
-
 # الأيات
 
 >

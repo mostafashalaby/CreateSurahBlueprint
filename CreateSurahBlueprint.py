@@ -131,9 +131,9 @@ def main():
     """
     print("Welcome to CreateSurahBlueprint.py")
     print("What would you like to do?")
-    option_1 = ' (1) Show the list of Surahs'
+    option_1 = ' (1) Show the list of Surahs '
     option_1 = option_1.center(211, '*')
-    option_2 = ' (2) Create a Surah Blueprint'
+    option_2 = ' (2) Create a Surah Blueprint '
     option_2 = option_2.center(211, '*')
     exit_prompt = ' (Type \'exit\' to exit the program) '
     exit_prompt = exit_prompt.center(211, '*')
@@ -204,7 +204,14 @@ def create_surah_blueprint(surahs_to_create):
     Creates Surah Blueprints for the Surahs specified
     """
     current_directory = os.getcwd()
-    blueprint_folder = os.path.join(current_directory, "SurahBlueprints")
+    blueprint_folder = os.path.join(current_directory, "CreatedBlueprints")
+
+    first_page_lines = read("FirstPage.md")
+    rest_of_pages_lines = read("RestOfPages.md")
+
+    print(first_page_lines)
+    print(rest_of_pages_lines)
+
     if not os.path.exists(blueprint_folder):
         os.makedirs(blueprint_folder)
     print("Going to create the following Surah Blueprints:")
@@ -213,9 +220,7 @@ def create_surah_blueprint(surahs_to_create):
         number_pages = surah[PAGE_END] - surah[PAGE_START] + 1
         print(f"**Surah {surah[SURAH_NAME]} ({number_pages} pages)**")
         for i in range(number_pages):
-            filename = f"{surah[SURAH_INDEX]}- سورة {surah[SURAH_NAME]}"
-            extension = f"({i+1}).md"
-            filename += extension
+            filename = f"{surah[SURAH_INDEX]}- سورة {surah[SURAH_NAME]} ({i+1}).md"
             print(filename)
     print("Continue? (y/n)")
     answer = input()
@@ -224,20 +229,38 @@ def create_surah_blueprint(surahs_to_create):
             surah = index_list[surah_index]
             number_pages = surah[PAGE_END] - surah[PAGE_START] + 1
             for i in range(number_pages):
-                filename = f"{surah[SURAH_INDEX]}- سورة {surah[SURAH_NAME]}"
-                extension = f"({i+1}).md"
-                filename += extension
-                with open(os.path.join(blueprint_folder, filename), "w", encoding="utf-8") as f:
-                    f.write(f"---\n")
-                    f.write(f"title: \"{surah[SURAH_NAME]}\"\n")
-                    f.write(f"number: {surah[SURAH_INDEX]}\n")
-                    f.write(f"page: {surah[PAGE_START] + i}\n")
-                    f.write(f"---\n")
-                    f.write(f"\n")
-                    f.write(f"## {surah[SURAH_NAME]} - Page {surah[PAGE_START] + i}\n")
+                filename = f"{surah[SURAH_INDEX]}- سورة {surah[SURAH_NAME]} ({i+1}).md"
+                with open(os.path.join(blueprint_folder, filename), "w", encoding="utf-8") as file_handle:
+                    if i == 0:
+                        file_handle.write(f"Next Page: [[{surah[SURAH_INDEX]}- سورة {surah[SURAH_NAME]} ({i+2})]]\n\n")
+                        for line in first_page_lines:
+                            file_handle.write(line)
+                    elif i == number_pages - 1:
+                        file_handle.write(f"Previous Page: [[{surah[SURAH_INDEX]}- سورة {surah[SURAH_NAME]} ({i})]]\n\n")
+                        for line in rest_of_pages_lines:
+                            file_handle.write(line)
+                    else:
+                        file_handle.write(f"Previous Page: [[{surah[SURAH_INDEX]}- سورة {surah[SURAH_NAME]} ({i})]]\n")
+                        file_handle.write(f"Next Page: [[{surah[SURAH_INDEX]}- سورة {surah[SURAH_NAME]} ({i+2})]]\n\n")
+                        for line in rest_of_pages_lines:
+                            file_handle.write(line)
+                    
         print("Surah Blueprints created successfully!")
     else:
         return
+
+def read(filename):
+    """
+    Reads the contents of a file and returns it as a list of lines
+    """
+    try:
+        file_handle = open(filename, "r", encoding="utf-8")
+        lines = file_handle.readlines()
+        file_handle.close()
+        return lines
+    except FileNotFoundError:
+        print(f"File {filename} not found")
+        return []
 
 if __name__ == "__main__":
     main()
