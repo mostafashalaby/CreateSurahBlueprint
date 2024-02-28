@@ -1,4 +1,3 @@
-Previous Page: [[x]]
 Next Page: [[x]]
 
 # سورة مدنية أم مكية؟ 
