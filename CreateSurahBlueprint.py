@@ -178,7 +178,7 @@ def prompt_surah_blueprint():
         if len(surah_index) == 1:
             surah_index = int(surah_index[0])
             print(f"You have chosen Surah {index_list[surah_index-1][1]}. Is that right? (y/n)")
-            answer = input()
+            answer = input().lower()
             if answer == "y":
                 return [surah_index-1]
             else:
@@ -223,14 +223,17 @@ def create_surah_blueprint(surahs_to_create):
             filename = f"{surah[SURAH_INDEX]}- سورة {surah[SURAH_NAME]} ({i+1}).md"
             print(filename)
     print("Continue? (y/n)")
-    answer = input()
-    if answer == "y":
+    answer = input().lower()
+    if answer == "y": 
         for surah_index in surahs_to_create:
             surah = index_list[surah_index]
             number_pages = surah[PAGE_END] - surah[PAGE_START] + 1
+            surah_folder = os.path.join(blueprint_folder, f"{surah[SURAH_INDEX]}- سورة {surah[SURAH_NAME]}")
             for i in range(number_pages):
                 filename = f"{surah[SURAH_INDEX]}- سورة {surah[SURAH_NAME]} ({i+1}).md"
-                with open(os.path.join(blueprint_folder, filename), "w", encoding="utf-8") as file_handle:
+                if not os.path.exists(surah_folder):
+                    os.makedirs(surah_folder)
+                with open(os.path.join(surah_folder, filename), "w", encoding="utf-8") as file_handle:
                     if i == 0:
                         file_handle.write(f"Next Page: [[{surah[SURAH_INDEX]}- سورة {surah[SURAH_NAME]} ({i+2})]]\n\n")
                         for line in first_page_lines:
